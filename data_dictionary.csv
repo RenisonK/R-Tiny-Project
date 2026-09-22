@@ -1,0 +1,11 @@
+Variable,Data_Type,Description
+Car_ID,Character,Unique identifier for each car
+Car_Name,Character,Name/model of the car
+Year,Integer,Manufacturing year
+Present_Price_Lakh,Numeric,Approximate current/listed price in lakh INR
+Kms_Driven,Integer,Distance driven by the car in kilometres
+Fuel_Type,Character,Fuel category: Petrol or Diesel
+Seller_Type,Character,Seller category: Individual or Dealer
+Transmission,Character,Manual or Automatic transmission
+Owner,Integer,Previous-owner indicator used in this sample
+Selling_Price_Lakh,Numeric,Observed/estimated selling price in lakh INR

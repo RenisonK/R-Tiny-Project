@@ -1,0 +1,5 @@
+# R
+# RStudio
+# rmarkdown
+# knitr
+# Base R is used for data analysis.

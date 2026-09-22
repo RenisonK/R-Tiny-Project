@@ -1,0 +1,10 @@
+# R temporary files
+.Rhistory
+.RData
+.Ruserdata
+
+# RStudio project metadata
+.Rproj.user/
+
+# Temporary HTML files
+*.html~

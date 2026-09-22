@@ -1,0 +1,272 @@
+---
+title: "Car Price Analysis Using R"
+author: "Tiny Project"
+date: "2026-09-22"
+output:
+  html_document:
+    toc: true
+    toc_depth: 2
+  pdf_document: default
+---
+
+# 1. Introduction
+
+Car prices are influenced by several factors such as manufacturing year, present price, kilometres driven, fuel type, transmission, seller type and ownership history. This Tiny Project uses **R and R Markdown** to import, clean, summarize and visualize car-price data.
+
+The analysis follows the techniques demonstrated in Practical 8, 9 and 10 and focuses on exploratory data analysis rather than building a machine-learning prediction model.
+
+# 2. Objectives
+
+The main objectives are:
+
+- To import car-price data into R.
+- To inspect the structure and summary of the dataset.
+- To identify and handle missing or duplicate records.
+- To perform basic data preprocessing and cleaning.
+- To calculate descriptive statistical measures.
+- To explore categorical variables such as fuel type and transmission.
+- To create graphs and plots for car prices and usage.
+- To study relationships between selling price and other numerical variables.
+- To interpret the analysis and present findings and a conclusion.
+
+# 3. Dataset Description
+
+The project uses an included sample dataset named `car_data.csv`. It contains 40 car records and 10 variables.
+
+| Variable | Description |
+|---|---|
+| Car_ID | Unique car identification code |
+| Car_Name | Car model/name |
+| Year | Manufacturing year |
+| Present_Price_Lakh | Approximate present/listed price in lakh INR |
+| Kms_Driven | Distance driven in kilometres |
+| Fuel_Type | Petrol or Diesel |
+| Seller_Type | Individual or Dealer |
+| Transmission | Manual or Automatic |
+| Owner | Previous-owner indicator used in this sample |
+| Selling_Price_Lakh | Observed/estimated selling price in lakh INR |
+
+**Academic note:** The included dataset is a structured sample dataset prepared for this Tiny Project. It is intended for demonstrating R data analysis techniques and should not be treated as a live market-price database.
+
+# 4. Required R Functions
+
+The project uses base R functions including:
+
+`read.csv()`, `head()`, `str()`, `summary()`, `dim()`, `colSums()`, `is.na()`, `duplicated()`, `median()`, `mean()`, `var()`, `sd()`, `min()`, `max()`, `table()`, `pie()`, `barplot()`, `hist()`, `plot()`, and `cor()`.
+
+# 5. Importing the Data
+
+```{r import-data}
+# Import the car dataset from the same folder as this R Markdown file.
+car_data <- read.csv("car_data.csv", stringsAsFactors = FALSE)
+
+head(car_data)
+```
+
+The `read.csv()` function imports the CSV file into R as a data frame. The `head()` function displays the first six records so that the imported data can be checked.
+
+# 6. Understanding the Dataset
+
+```{r structure}
+dim(car_data)
+str(car_data)
+```
+
+The `dim()` function returns the number of rows and columns. The `str()` function shows the structure of the data frame and the type of each variable.
+
+```{r summary}
+summary(car_data)
+```
+
+The `summary()` function provides descriptive information such as minimum, maximum, mean and quartiles for numerical variables and frequency information for categorical variables.
+
+# 7. Data Preprocessing and Cleaning
+
+## 7.1 Missing Values
+
+```{r missing-values}
+colSums(is.na(car_data))
+```
+
+`is.na()` identifies missing values and `colSums()` counts them for each column.
+
+## 7.2 Duplicate Records
+
+```{r duplicates}
+sum(duplicated(car_data))
+```
+
+The `duplicated()` function identifies repeated rows and `sum()` gives the total number of duplicate records.
+
+## 7.3 Checking Data Types
+
+```{r data-types}
+sapply(car_data, class)
+```
+
+The `sapply()` function applies `class()` to every column so that numerical and categorical variables can be checked before analysis.
+
+# 8. Descriptive Statistical Analysis
+
+## 8.1 Selling Price
+
+```{r selling-price-statistics}
+mean(car_data$Selling_Price_Lakh)
+median(car_data$Selling_Price_Lakh)
+var(car_data$Selling_Price_Lakh)
+sd(car_data$Selling_Price_Lakh)
+min(car_data$Selling_Price_Lakh)
+max(car_data$Selling_Price_Lakh)
+```
+
+The `mean()` gives the average selling price, `median()` gives the middle value, `var()` measures variance and `sd()` measures standard deviation. `min()` and `max()` identify the lowest and highest values.
+
+## 8.2 Present Price
+
+```{r present-price-statistics}
+mean(car_data$Present_Price_Lakh)
+median(car_data$Present_Price_Lakh)
+sd(car_data$Present_Price_Lakh)
+```
+
+These statistics help compare the present/listed price distribution with the selling-price distribution.
+
+# 9. Categorical Data Analysis
+
+## 9.1 Fuel Type
+
+```{r fuel-table}
+fuel_count <- table(car_data$Fuel_Type)
+fuel_count
+```
+
+The `table()` function counts the number of observations in each fuel category.
+
+```{r fuel-pie}
+pie(fuel_count, main = "Fuel Type Distribution", labels = names(fuel_count))
+```
+
+The pie chart shows the proportion of Petrol and Diesel cars in the sample.
+
+## 9.2 Transmission
+
+```{r transmission-table}
+transmission_count <- table(car_data$Transmission)
+transmission_count
+```
+
+This frequency table shows how many cars use Manual and Automatic transmission.
+
+```{r transmission-bar}
+barplot(transmission_count,
+        main = "Transmission Distribution",
+        xlab = "Transmission",
+        ylab = "Number of Cars")
+```
+
+The bar plot makes it easier to compare the transmission categories.
+
+# 10. Car Selling Prices
+
+```{r selling-price-bar}
+barplot(car_data$Selling_Price_Lakh,
+        names.arg = car_data$Car_Name,
+        main = "Selling Price of Cars",
+        xlab = "Car Models",
+        ylab = "Selling Price (Lakh INR)",
+        las = 2,
+        cex.names = 0.65)
+```
+
+The bar plot compares the selling price of individual cars. Taller bars represent higher selling prices.
+
+# 11. Kilometres Driven
+
+```{r kms-histogram}
+hist(car_data$Kms_Driven,
+     main = "Distribution of Kilometres Driven",
+     xlab = "Kilometres Driven",
+     ylab = "Number of Cars")
+```
+
+The histogram shows how kilometres driven are distributed across the sample.
+
+# 12. Present Price vs Selling Price
+
+```{r price-scatter}
+plot(car_data$Present_Price_Lakh,
+     car_data$Selling_Price_Lakh,
+     main = "Present Price vs Selling Price",
+     xlab = "Present Price (Lakh INR)",
+     ylab = "Selling Price (Lakh INR)",
+     pch = 19)
+```
+
+The scatter plot helps examine whether cars with higher present prices also tend to have higher selling prices.
+
+# 13. Kilometres Driven vs Selling Price
+
+```{r kms-scatter}
+plot(car_data$Kms_Driven,
+     car_data$Selling_Price_Lakh,
+     main = "Kilometres Driven vs Selling Price",
+     xlab = "Kilometres Driven",
+     ylab = "Selling Price (Lakh INR)",
+     pch = 19)
+```
+
+This plot explores the relationship between vehicle usage and selling price.
+
+# 14. Correlation Analysis
+
+## 14.1 Present Price and Selling Price
+
+```{r correlation-price}
+cor(car_data$Present_Price_Lakh,
+    car_data$Selling_Price_Lakh)
+```
+
+The `cor()` function calculates the Pearson correlation coefficient. A value close to +1 indicates a strong positive linear association.
+
+## 14.2 Kilometres Driven and Selling Price
+
+```{r correlation-kms}
+cor(car_data$Kms_Driven,
+    car_data$Selling_Price_Lakh)
+```
+
+This correlation measures the direction and strength of the linear association between kilometres driven and selling price.
+
+**Interpretation note:** Correlation describes association in this dataset. It does not prove that one variable causes a change in another.
+
+# 15. Findings
+
+Based on the exploratory analysis:
+
+1. The dataset contains 40 car records and 10 variables.
+2. The dataset can be checked for missing and duplicate observations using base R functions.
+3. Selling prices vary across different car models.
+4. The sample contains both Petrol and Diesel vehicles.
+5. Both Manual and Automatic transmission types are represented.
+6. Present price and selling price show a positive relationship in the sample.
+7. Kilometres driven can be compared with selling price to examine the effect of vehicle usage.
+
+# 16. Conclusion
+
+This Tiny Project demonstrates how **R and R Markdown** can be used for car price analysis. The project covers the complete basic exploratory workflow required for Practical 8, 9 and 10: data importing, dataset inspection, preprocessing and cleaning, descriptive statistics, categorical analysis, graph creation, correlation analysis and interpretation.
+
+The analysis shows that car prices vary according to several observable characteristics. Present price, manufacturing year, kilometres driven, fuel type, transmission and ownership history provide useful variables for exploring price differences. However, this project is an exploratory analysis of the supplied sample and should not be used as a real-world pricing or valuation system.
+
+R Markdown is useful because it combines R code, output, graphs and explanations in a single reproducible report.
+
+# 17. Project Files
+
+The project contains:
+
+- `Tiny_Project.Rmd` - complete R Markdown source file
+- `car_data.csv` - car-price dataset
+- `data_dictionary.csv` - variable descriptions
+- `Tiny_Project.html` - rendered report
+- `README.md` - project documentation
+- `requirements.txt` - software/package requirements
+- `screenshots/` - supporting graph images
